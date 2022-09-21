@@ -32,17 +32,21 @@ router.post(
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     } else {
-      const dbConnect = dbo.getDb();
-      const user = req.body;
+      try {
+        const dbConnect = dbo.getDb();
+        const user = req.body;
 
-      dbConnect.collection('users').insertOne(user, function (err, result) {
-        if (err) {
-          res.status(400).send('Error inserting matches!');
-        } else {
-          console.log(`Added a new match with id ${result}`);
-          res.status(201).send(result.insertedId);
-        }
-      });
+        dbConnect.collection('users').insertOne(user, function (err, result) {
+          if (err) {
+            res.status(400).send('Error inserting matches!');
+          } else {
+            console.log(`Added a new match with id ${result}`);
+            res.status(201).send(result.insertedId);
+          }
+        });
+      } catch (exception) {
+        res.status(500).send(exception);
+      }
     }
   }
 );
