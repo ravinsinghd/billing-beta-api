@@ -33,7 +33,7 @@ router.post(
       return res.status(400).json({ errors: errors.array() });
     } else {
       try {
-        const dbConnect = dbo.getDb();
+        const dbConnect = db.getDb();
         const user = req.body;
 
         dbConnect.collection('users').insertOne(user, function (err, result) {
@@ -45,7 +45,8 @@ router.post(
           }
         });
       } catch (exception) {
-        res.status(500).send(exception);
+        console.log(exception.message);
+        res.status(500).send(exception.message);
       }
     }
   }
