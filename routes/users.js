@@ -33,7 +33,7 @@ router.post(
       return res.status(400).json({ errors: errors.array() });
     } else {
       try {
-        const dbConnect = db.getDb();
+        const dbConnect = dbo.getDb();
         const user = req.body;
 
         dbConnect.collection('users').insertOne(user, function (err, result) {
