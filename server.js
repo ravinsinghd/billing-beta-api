@@ -4,9 +4,11 @@
  * Module dependencies.
  */
 
-var app = require('./app');
 var debug = require('debug')('billing:server');
 var http = require('http');
+
+var app = require('./app');
+const dbo = require('./db/connection');
 
 /**
  * Get port from environment and store in Express.
@@ -25,9 +27,16 @@ var server = http.createServer(app);
  * Listen on provided port, on all network interfaces.
  */
 
-server.listen(port);
-server.on('error', onError);
-server.on('listening', onListening);
+dbo.connectToServer(function (err) {
+  if (err) {
+    console.error(err);
+    process.exit();
+  }
+
+  server.listen(port);
+  server.on('error', onError);
+  server.on('listening', onListening);
+});
 
 /**
  * Normalize a port into a number, string, or false.
